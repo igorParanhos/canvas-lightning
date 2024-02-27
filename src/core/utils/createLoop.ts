@@ -6,7 +6,7 @@ export type CreateLoopCallback = (
 export const createLoop = (callback: CreateLoopCallback) => {
   let frame: any;
   let abortSignal = false;
-  let initialTime = performance.now();
+  const initialTime = performance.now();
   let timeSinceLastFrame = performance.now();
 
   const loop = () => {

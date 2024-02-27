@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import './App.css';
-import { Controller } from './utils/Controller';
+import { Controller } from './core/Controller';
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);

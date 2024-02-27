@@ -1,19 +1,25 @@
-import { animateLerp } from './lerp';
-import { createLoop } from './createLoop';
+import { animateLerp } from './utils/lerp';
+import { createLoop } from './utils/createLoop';
 import {
-  Lightning,
-  Object,
   clearCanvas,
-  createLightning,
-  createSquare,
   getMousePositionOnCanvas,
 } from './utils';
+
+import {
+  createLightning,
+  createSquare,
+} from './objects';
+
+import {
+  Lightning,
+  Entity,
+} from './objects/types';
 
 export class Controller {
   #canvas: HTMLCanvasElement;
   #ctx: CanvasRenderingContext2D;
   #_clearLoop: () => void = () => null;
-  #objects: Object[] = [];
+  #objects: Entity[] = [];
   #_mousePressed = false;
 
   get width() {

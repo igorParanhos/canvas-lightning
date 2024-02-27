@@ -1,48 +1,8 @@
-export type Object = {
-  x: number;
-  y: number;
-  setPosition: (x: number, y: number) => void;
-  render: (ctx: CanvasRenderingContext2D) => void;
-};
+import { createVector } from "../utils";
+import { Vector } from "../utils/types";
+import { Lightning } from "./types";
 
-export type Vector = {
-  x: number;
-  y: number;
-  z?: number;
-};
-
-export const createVector = (x: number, y: number, z: number = 0): Vector => ({
-  x,
-  y,
-  z,
-});
-
-export type Square = Object & {
-  h: number;
-  w: number;
-};
-
-export const createSquare = (
-  x: number,
-  y: number,
-  w: number,
-  h: number
-): Square => ({
-  x,
-  y,
-  w,
-  h,
-  setPosition(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  },
-  render(ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = '#f09933';
-    ctx.fillRect(this.x, this.y, this.w, this.h);
-  },
-});
-
-function createLightningSegments(vector1: Vector, vector2: Vector) {
+function createLightningSegments(vector1: Vector, vector2: Vector): Vector[] {
   const segments = [vector1, vector2];
   const distance = Math.sqrt(
     Math.pow(vector2.x - vector1.x, 2) + Math.pow(vector2.y - vector1.y, 2)
@@ -56,7 +16,7 @@ function createLightningSegments(vector1: Vector, vector2: Vector) {
 
   for (let i = 0; i < maxSegments; i++) {
     const lastSegment = segments[segments.length - 1];
-    let xVariance =
+    const xVariance =
       (dX / maxSegments) * i + (Math.random() * maxDeviation - deviation / 2);
 
     let yVariance =
@@ -77,13 +37,6 @@ function createLightningSegments(vector1: Vector, vector2: Vector) {
   return segments;
 }
 
-export type Lightning = Object & {
-  toX: number;
-  toY: number;
-  redraw: () => void;
-  setToPosition: (x: number, y: number) => void;
-};
-
 export const createLightning = (
   x: number,
   y: number,
@@ -95,7 +48,7 @@ export const createLightning = (
     createVector(toX, toY)
   );
 
-  return {
+  const obj = {
     x,
     y,
     toX,
@@ -115,8 +68,8 @@ export const createLightning = (
     },
     draw(ctx: CanvasRenderingContext2D) {
       // draw segments
-      ctx.strokeStyle = 'rgba(220, 220, 255, 1)';
-      ctx.shadowColor = 'white';
+      ctx.strokeStyle = "rgba(220, 220, 255, 1)";
+      ctx.shadowColor = "white";
       ctx.shadowBlur = Math.random() * 100;
       ctx.lineWidth = (Math.random() * 7) | 1;
 
@@ -128,8 +81,8 @@ export const createLightning = (
       ctx.stroke();
 
       // draw segments
-      ctx.strokeStyle = 'rgba(255, 255, 255, 1)';
-      ctx.shadowColor = 'white';
+      ctx.strokeStyle = "rgba(255, 255, 255, 1)";
+      ctx.shadowColor = "white";
       ctx.shadowBlur = Math.random() * 100;
       ctx.lineWidth = 100;
       ctx.beginPath();
@@ -139,7 +92,7 @@ export const createLightning = (
       });
 
       // points
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = "white";
       ctx.beginPath();
       ctx.arc(this.toX, this.toY, 5, 0, Math.PI * 2);
       ctx.arc(this.x, this.y, 5, 0, Math.PI * 2);
@@ -167,18 +120,6 @@ export const createLightning = (
       this.draw(ctx);
     },
   };
-};
 
-export const clearCanvas = (ctx: CanvasRenderingContext2D) => {
-  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-};
-
-export const getMousePositionOnCanvas = (
-  canvas: HTMLCanvasElement,
-  event: MouseEvent
-) => {
-  const rect = canvas.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
-  return { x, y };
+  return obj as unknown as Lightning;
 };
